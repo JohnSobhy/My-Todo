@@ -10,7 +10,10 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.john_halaka.mytodo.data.TodoRepository
 import com.john_halaka.mytodo.ui.theme.MyTodoTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
