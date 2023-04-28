@@ -3,13 +3,13 @@ package com.john_halaka.mytodo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.ui.Modifier
-import com.john_halaka.mytodo.data.TodoRepository
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.john_halaka.mytodo.ui.theme.MyTodoTheme
+import com.john_halaka.mytodo.util.Routes
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -17,24 +17,39 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        val repository :TodoRepository
+
         super.onCreate(savedInstanceState)
         setContent {
             MyTodoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.TODO_LIST
                 ) {
-
-                    FloatingActionButton(onClick = {
-
-                    }) {
+                    composable(Routes.TODO_LIST) {
+                        TodoListScreen(
+                            onNavigate = {
+                                navController.navigate(it.route)
+                            }
+                        )
+                    }
+                    composable(
+                        route = Routes.ADD_EDIT_TODO + "?todoId={todoId}",
+                        arguments = listOf(
+                            navArgument(name = "todoId") {
+                                type = NavType.IntType
+                                defaultValue = -1
+                            }
+                        )
+                    ) {
+                        AddEditTodoScreen(onPopBackStack = { navController.popBackStack() })
 
                     }
                 }
+
             }
         }
     }
 }
+
 
